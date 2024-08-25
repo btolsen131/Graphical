@@ -8,7 +8,7 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 
-	r.GET("/users", controllers.GetUsers)
+	r.GET("/nodes", controllers.GetNodes)
 
 	return r
 }

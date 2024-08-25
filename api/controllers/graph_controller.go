@@ -2,22 +2,23 @@ package controllers
 
 import (
 	"Graphical/database"
+	"Graphical/models"
 	"net/http"
 	"github.com/gin-gonic/gin"
 )
 
-func GetUsers(c *gin.Context){
+func GetNodes(c *gin.Context){
 	db := database.GetDB()
 
-	var usernames []string
+	var rawNodes []models.Node
 
-	result := db.Raw("SELECT username FROM test").Scan(&usernames)
-	
+	result := db.Find(&rawNodes)
+
 	if result.Error != nil {
 	c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
 	return
 	}
 
-	c.JSON(http.StatusOK, usernames)
+	c.JSON(http.StatusOK, rawNodes)
 }
 
