@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
   "strings"
   "strconv"
+  "fmt"
 )
 
 type dbNode struct {
@@ -14,6 +15,41 @@ type dbNode struct {
   Title string
   Body string
   Children string
+}
+
+type input struct {
+  Title string `json:"title" binding:"required"`
+  Body string  `json:"body"`
+  Children []int  `json:"children"`
+}
+
+func AddNode(c *gin.Context){
+  var requestData input
+  err := c.ShouldBindJSON(&requestData)
+  if err != nil {
+    c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+    return
+  }
+
+  var childrenStr string
+  if requestData.Children != nil {
+    childrenStr = strings.Trim(strings.Join(strings.Fields(fmt.Sprint(requestData.Children)), ","), "[]")
+  } else {
+    childrenStr = ""
+  }
+
+	query := `INSERT INTO notes (title, body, children) VALUES ($1, $2, $3) RETURNING id`
+	fmt.Printf("Executing query: %s with params: %v", query, []interface{}{requestData.Title, requestData.Body, childrenStr})
+	db := database.GetDB()
+	var newID int
+	result := db.Raw(query, requestData.Title, requestData.Body, childrenStr).Scan(&newID)
+
+  if result.Error != nil {
+    c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+    return
+  }
+
+  c.JSON(http.StatusOK, gin.H{"status":"Note added successfully", "id": newID})
 }
 
 func GetNodes(c *gin.Context){
