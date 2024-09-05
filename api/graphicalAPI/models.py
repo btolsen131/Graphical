@@ -7,4 +7,7 @@ class NoteNode(models.Model):
     body = models.TextField(null=True, blank=True)
     children = models.ManyToManyField('self', symmetrical=False, blank=True)
 
+    def __str__(self):
+        return str(self.title)
+
 
