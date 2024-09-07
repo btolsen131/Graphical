@@ -1,7 +1,7 @@
 from itsdangerous import Serializer
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
-from .models import NoteNode
+from .models import NoteNode, Tip
 from django.contrib.auth.models import User
 
 class NoteNodeSerializer(ModelSerializer):
@@ -29,3 +29,8 @@ class UserSerializer(ModelSerializer):
         if name == '':
             name = obj.email
         return name
+
+class TipSerializer(ModelSerializer):
+    class Meta:
+        model = Tip 
+        fields = '__all__'

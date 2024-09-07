@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import axiosClient from '../../src//services/axiosInstance'
 import {Link} from 'react-router-dom';
+import {Tip} from "../types/tip";
 
 const LoginPage = () => {
   const [eyeball, setEyeBall] = useState(false);
@@ -7,6 +9,23 @@ const LoginPage = () => {
     email: "",
     password:""
   });
+  const [tip, setTip] = useState<Tip | null>(null);
+
+  useEffect(() => {
+    fetchTip();
+  }, [])
+
+
+  async function fetchTip(){
+    try {
+    const client = axiosClient();
+    const response = await client.get<Tip>("/tips/random");
+    console.log(response)
+    setTip(response.data);
+    } catch (error) {
+      console.error(`Failed to fetch tip: ${error}`);
+    }
+  };
 
   function handleEyeBall(){
     setEyeBall(!eyeball);
@@ -31,7 +50,9 @@ const LoginPage = () => {
         <div className="col-span-2 flex justify-center items-center w-full rounded bg-indigo-700">
           <div className='w-56 glex-flex-col'>
           <p>image or something here</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea c</p>
+          {tip != null && (
+            <p>{tip.body}</p>
+          )}
           </div>
         </div>
         <form onSubmit={handleLoginSubmit} className="ml-2 col-span-1 p-6 rounded border">

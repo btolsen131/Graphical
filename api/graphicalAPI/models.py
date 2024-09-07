@@ -10,4 +10,6 @@ class NoteNode(models.Model):
     def __str__(self):
         return str(self.title)
 
+class Tip(models.Model):
+    body = models.TextField(null=False, blank=False)
 
