@@ -1,0 +1,6 @@
+__pycache__/
+/api/__pycache__/
+/graphicalAPI/__pycache__
+*.pyc
+*.pyo
+*.pyd
