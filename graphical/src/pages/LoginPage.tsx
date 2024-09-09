@@ -49,7 +49,6 @@ const LoginPage = () => {
       <div className="grid grid-cols-3 font-sans p-4">
         <div className="col-span-2 flex justify-center items-center w-full rounded bg-indigo-700">
           <div className='w-56 glex-flex-col'>
-          <p>image or something here</p>
           {tip != null && (
             <p>{tip.body}</p>
           )}
